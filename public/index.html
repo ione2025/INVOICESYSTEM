@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IONE Invoice System - Professional E-Commerce Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-size: 1em;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 15px 30px;
+            background: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #667eea;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .tab-button:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-button.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #764ba2;
+        }
+
+        .btn-secondary:hover {
+            background: #653a8a;
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .list-container {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .list-item {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .list-item h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .list-item p {
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .badge-pending {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .badge-processing {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .badge-paid {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-completed {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-cancelled {
+            background: #dc3545;
+            color: white;
+        }
+
+        .badge-buyer {
+            background: #007bff;
+            color: white;
+        }
+
+        .badge-seller {
+            background: #6f42c1;
+            color: white;
+        }
+
+        .invoice-items {
+            margin-top: 15px;
+        }
+
+        .invoice-item {
+            background: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .message-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧾 IONE Invoice System</h1>
+            <p>Professional E-Commerce Platform for Buyers and Sellers</p>
+        </div>
+
+        <div class="stats-grid" id="statsGrid">
+            <!-- Statistics will be loaded here -->
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('dashboard')">Dashboard</button>
+            <button class="tab-button" onclick="showTab('users')">Users</button>
+            <button class="tab-button" onclick="showTab('invoices')">Invoices</button>
+            <button class="tab-button" onclick="showTab('transactions')">Transactions</button>
+            <button class="tab-button" onclick="showTab('create-user')">Create User</button>
+            <button class="tab-button" onclick="showTab('create-invoice')">Create Invoice</button>
+        </div>
+
+        <div id="dashboard" class="tab-content active">
+            <h2>📊 System Dashboard</h2>
+            <p style="margin: 20px 0; color: #666;">Welcome to the IONE Invoice System! Monitor your e-commerce transactions and manage invoices efficiently.</p>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">Key Features:</h3>
+                <ul style="list-style-position: inside; color: #666; line-height: 2;">
+                    <li>✓ Manage Buyers and Sellers</li>
+                    <li>✓ Create and Track Invoices</li>
+                    <li>✓ Process Payments through IONE (2.5% commission)</li>
+                    <li>✓ Real-time Transaction Monitoring</li>
+                    <li>✓ Automated Commission Calculation</li>
+                    <li>✓ Invoice Status Tracking</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="users" class="tab-content">
+            <h2>👥 Users Management</h2>
+            <div style="margin: 20px 0;">
+                <button class="btn" onclick="loadUsers('all')">All Users</button>
+                <button class="btn btn-secondary" onclick="loadUsers('buyer')">Buyers</button>
+                <button class="btn btn-secondary" onclick="loadUsers('seller')">Sellers</button>
+            </div>
+            <div id="usersList" class="list-container"></div>
+        </div>
+
+        <div id="invoices" class="tab-content">
+            <h2>📄 Invoices</h2>
+            <div style="margin: 20px 0;">
+                <button class="btn" onclick="loadInvoices('all')">All Invoices</button>
+                <button class="btn btn-secondary" onclick="loadInvoices('pending')">Pending</button>
+                <button class="btn btn-secondary" onclick="loadInvoices('processing')">Processing</button>
+                <button class="btn btn-success" onclick="loadInvoices('paid')">Paid</button>
+            </div>
+            <div id="invoicesList" class="list-container"></div>
+        </div>
+
+        <div id="transactions" class="tab-content">
+            <h2>💳 Transactions</h2>
+            <div style="margin: 20px 0;">
+                <button class="btn" onclick="loadTransactions()">All Transactions</button>
+                <button class="btn btn-success" onclick="loadTransactions('completed')">Completed</button>
+                <button class="btn btn-secondary" onclick="loadTransactions('pending')">Pending</button>
+            </div>
+            <div id="transactionsList" class="list-container"></div>
+        </div>
+
+        <div id="create-user" class="tab-content">
+            <h2>➕ Create New User</h2>
+            <div id="userMessage"></div>
+            <form id="userForm">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Name *</label>
+                        <input type="text" id="userName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="userEmail" required>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Type *</label>
+                        <select id="userType" required>
+                            <option value="">Select Type</option>
+                            <option value="buyer">Buyer</option>
+                            <option value="seller">Seller</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="userPhone">
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Company</label>
+                        <input type="text" id="userCompany">
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" id="userAddress">
+                    </div>
+                </div>
+                <button type="submit" class="btn">Create User</button>
+            </form>
+        </div>
+
+        <div id="create-invoice" class="tab-content">
+            <h2>📝 Create New Invoice</h2>
+            <div id="invoiceMessage"></div>
+            <form id="invoiceForm">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Seller *</label>
+                        <select id="sellerId" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Buyer *</label>
+                        <select id="buyerId" required></select>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Tax Amount</label>
+                        <input type="number" id="invoiceTax" value="0" min="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Due Date</label>
+                        <input type="date" id="invoiceDueDate">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea id="invoiceNotes" rows="3"></textarea>
+                </div>
+                
+                <h3 style="margin: 20px 0; color: #667eea;">Invoice Items</h3>
+                <div id="invoiceItems">
+                    <div class="invoice-item-form">
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Description *</label>
+                                <input type="text" class="itemDescription" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Quantity *</label>
+                                <input type="number" class="itemQuantity" min="1" value="1" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Unit Price *</label>
+                            <input type="number" class="itemPrice" min="0" step="0.01" required>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" onclick="addInvoiceItem()">+ Add Item</button>
+                <button type="submit" class="btn" style="margin-left: 10px;">Create Invoice</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = '/api';
+
+        // Tab switching
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Load data when switching tabs
+            if (tabName === 'dashboard') loadStatistics();
+            if (tabName === 'users') loadUsers('all');
+            if (tabName === 'invoices') loadInvoices('all');
+            if (tabName === 'transactions') loadTransactions();
+            if (tabName === 'create-invoice') loadUserDropdowns();
+        }
+
+        // Load statistics
+        async function loadStatistics() {
+            try {
+                const response = await fetch(`${API_URL}/transactions/statistics`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const stats = data.data;
+                    document.getElementById('statsGrid').innerHTML = `
+                        <div class="stat-card">
+                            <h3>${stats.totalUsers}</h3>
+                            <p>Total Users</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>${stats.totalInvoices}</h3>
+                            <p>Total Invoices</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>${stats.totalTransactions}</h3>
+                            <p>Total Transactions</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>$${stats.totalRevenue.toFixed(2)}</h3>
+                            <p>Total Revenue</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>$${stats.totalIoneCommission.toFixed(2)}</h3>
+                            <p>IONE Commission (2.5%)</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>${stats.invoicesByStatus.paid}</h3>
+                            <p>Paid Invoices</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        // Load users
+        async function loadUsers(type) {
+            try {
+                const url = type === 'all' ? `${API_URL}/users` : `${API_URL}/users?type=${type}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const usersList = document.getElementById('usersList');
+                    if (data.data.length === 0) {
+                        usersList.innerHTML = '<p style="color: #666;">No users found. Create a user to get started!</p>';
+                    } else {
+                        usersList.innerHTML = data.data.map(user => `
+                            <div class="list-item">
+                                <h4>${user.name} <span class="badge badge-${user.type}">${user.type}</span></h4>
+                                <p><strong>Email:</strong> ${user.email}</p>
+                                ${user.company ? `<p><strong>Company:</strong> ${user.company}</p>` : ''}
+                                ${user.phone ? `<p><strong>Phone:</strong> ${user.phone}</p>` : ''}
+                                <p style="font-size: 0.9em; color: #999;">ID: ${user.id}</p>
+                            </div>
+                        `).join('');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+        // Load invoices
+        async function loadInvoices(status) {
+            try {
+                const url = status === 'all' ? `${API_URL}/invoices` : `${API_URL}/invoices?status=${status}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const invoicesList = document.getElementById('invoicesList');
+                    if (data.data.length === 0) {
+                        invoicesList.innerHTML = '<p style="color: #666;">No invoices found. Create an invoice to get started!</p>';
+                    } else {
+                        invoicesList.innerHTML = data.data.map(invoice => `
+                            <div class="list-item">
+                                <h4>Invoice #${invoice.invoiceNumber} <span class="badge badge-${invoice.status}">${invoice.status}</span></h4>
+                                <p><strong>Total:</strong> $${invoice.total.toFixed(2)} (IONE Commission: $${invoice.ioneCommission.toFixed(2)})</p>
+                                <p><strong>Subtotal:</strong> $${invoice.subtotal.toFixed(2)} | <strong>Tax:</strong> $${invoice.tax.toFixed(2)}</p>
+                                <p><strong>Items:</strong> ${invoice.items.length}</p>
+                                ${invoice.status === 'pending' ? `<button class="btn btn-success" style="margin-top: 10px;" onclick="processPayment('${invoice.id}')">Process Payment</button>` : ''}
+                                <p style="font-size: 0.9em; color: #999; margin-top: 10px;">Created: ${new Date(invoice.createdAt).toLocaleString()}</p>
+                            </div>
+                        `).join('');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading invoices:', error);
+            }
+        }
+
+        // Load transactions
+        async function loadTransactions(status) {
+            try {
+                const url = status ? `${API_URL}/transactions?status=${status}` : `${API_URL}/transactions`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const transactionsList = document.getElementById('transactionsList');
+                    if (data.data.length === 0) {
+                        transactionsList.innerHTML = '<p style="color: #666;">No transactions found.</p>';
+                    } else {
+                        transactionsList.innerHTML = data.data.map(tx => `
+                            <div class="list-item">
+                                <h4>Transaction <span class="badge badge-${tx.status}">${tx.status}</span></h4>
+                                <p><strong>Amount:</strong> $${tx.amount.toFixed(2)}</p>
+                                <p><strong>IONE Commission:</strong> $${tx.ioneCommission.toFixed(2)}</p>
+                                <p><strong>Seller Receives:</strong> $${tx.sellerReceives.toFixed(2)}</p>
+                                <p><strong>Payment Method:</strong> ${tx.paymentMethod}</p>
+                                <p style="font-size: 0.9em; color: #999; margin-top: 10px;">Created: ${new Date(tx.createdAt).toLocaleString()}</p>
+                            </div>
+                        `).join('');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading transactions:', error);
+            }
+        }
+
+        // Process payment
+        async function processPayment(invoiceId) {
+            if (!confirm('Process payment for this invoice?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/transactions/process`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        invoiceId,
+                        paymentMethod: 'credit_card'
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    alert('Payment processed successfully!');
+                    loadInvoices('all');
+                    loadStatistics();
+                } else {
+                    alert('Error processing payment: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error processing payment:', error);
+                alert('Error processing payment');
+            }
+        }
+
+        // Load user dropdowns for invoice creation
+        async function loadUserDropdowns() {
+            try {
+                const response = await fetch(`${API_URL}/users`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const sellers = data.data.filter(u => u.type === 'seller');
+                    const buyers = data.data.filter(u => u.type === 'buyer');
+                    
+                    document.getElementById('sellerId').innerHTML = 
+                        '<option value="">Select Seller</option>' +
+                        sellers.map(s => `<option value="${s.id}">${s.name} (${s.email})</option>`).join('');
+                    
+                    document.getElementById('buyerId').innerHTML = 
+                        '<option value="">Select Buyer</option>' +
+                        buyers.map(b => `<option value="${b.id}">${b.name} (${b.email})</option>`).join('');
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+        // Add invoice item
+        function addInvoiceItem() {
+            const itemsDiv = document.getElementById('invoiceItems');
+            const newItem = document.createElement('div');
+            newItem.className = 'invoice-item-form';
+            newItem.style.marginTop = '20px';
+            newItem.style.paddingTop = '20px';
+            newItem.style.borderTop = '2px solid #e0e0e0';
+            newItem.innerHTML = `
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Description *</label>
+                        <input type="text" class="itemDescription" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity *</label>
+                        <input type="number" class="itemQuantity" min="1" value="1" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Unit Price *</label>
+                    <input type="number" class="itemPrice" min="0" step="0.01" required>
+                </div>
+            `;
+            itemsDiv.appendChild(newItem);
+        }
+
+        // Form submissions
+        document.getElementById('userForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const userData = {
+                name: document.getElementById('userName').value,
+                email: document.getElementById('userEmail').value,
+                type: document.getElementById('userType').value,
+                phone: document.getElementById('userPhone').value,
+                company: document.getElementById('userCompany').value,
+                address: document.getElementById('userAddress').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/users`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(userData)
+                });
+                
+                const data = await response.json();
+                const messageDiv = document.getElementById('userMessage');
+                
+                if (data.success) {
+                    messageDiv.innerHTML = '<div class="message message-success">User created successfully!</div>';
+                    document.getElementById('userForm').reset();
+                    loadStatistics();
+                } else {
+                    messageDiv.innerHTML = `<div class="message message-error">Error: ${data.errors.join(', ')}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('userMessage').innerHTML = '<div class="message message-error">Error creating user</div>';
+            }
+        });
+
+        document.getElementById('invoiceForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Collect items
+            const items = [];
+            document.querySelectorAll('.invoice-item-form').forEach(form => {
+                items.push({
+                    description: form.querySelector('.itemDescription').value,
+                    quantity: parseInt(form.querySelector('.itemQuantity').value),
+                    unitPrice: parseFloat(form.querySelector('.itemPrice').value)
+                });
+            });
+
+            const invoiceData = {
+                sellerId: document.getElementById('sellerId').value,
+                buyerId: document.getElementById('buyerId').value,
+                tax: parseFloat(document.getElementById('invoiceTax').value) || 0,
+                dueDate: document.getElementById('invoiceDueDate').value,
+                notes: document.getElementById('invoiceNotes').value,
+                items
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/invoices`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(invoiceData)
+                });
+                
+                const data = await response.json();
+                const messageDiv = document.getElementById('invoiceMessage');
+                
+                if (data.success) {
+                    messageDiv.innerHTML = '<div class="message message-success">Invoice created successfully!</div>';
+                    document.getElementById('invoiceForm').reset();
+                    loadStatistics();
+                } else {
+                    messageDiv.innerHTML = `<div class="message message-error">Error: ${data.errors ? data.errors.join(', ') : data.message}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('invoiceMessage').innerHTML = '<div class="message message-error">Error creating invoice</div>';
+            }
+        });
+
+        // Load initial statistics
+        loadStatistics();
+    </script>
+</body>
+</html>

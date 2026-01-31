@@ -1,0 +1,26 @@
+{
+  "name": "invoicesystem",
+  "version": "1.0.0",
+  "description": "Professional invoice system for e-commerce transactions between buyers and sellers through IONE intermediary",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
+    "test": "echo \"No tests specified yet\""
+  },
+  "keywords": [
+    "invoice",
+    "e-commerce",
+    "payment",
+    "ione",
+    "transaction"
+  ],
+  "author": "IONE",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "uuid": "^13.0.0"
+  }
+}
