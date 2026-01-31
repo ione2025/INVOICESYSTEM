@@ -282,6 +282,12 @@
             border: 1px solid #f5c6cb;
         }
 
+        .message-info {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -461,13 +467,15 @@
 
     <script>
         // Check if running on GitHub Pages (static mode) or with backend server
-        const isGitHubPages = window.location.hostname.includes('github.io');
+        const isGitHubPages = window.location.hostname === 'ione2025.github.io' || 
+                              window.location.hostname.endsWith('.github.io');
         const API_URL = isGitHubPages ? null : '/api';
         
         // Show notice if on GitHub Pages
         if (isGitHubPages) {
             const notice = document.createElement('div');
-            notice.style.cssText = 'background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; border: 1px solid #ffeaa7;';
+            notice.className = 'message message-info';
+            notice.style.cssText = 'margin-bottom: 20px; text-align: center;';
             notice.innerHTML = '<strong>📌 Demo Mode:</strong> This is a static preview on GitHub Pages. For full functionality with API integration, please run the server locally. See <a href="https://github.com/ione2025/INVOICESYSTEM" style="color: #667eea; font-weight: bold;">GitHub Repository</a> for instructions.';
             document.querySelector('.container').insertBefore(notice, document.querySelector('.header'));
         }
