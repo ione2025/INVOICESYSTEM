@@ -2,6 +2,12 @@
 
 A professional invoice management system for e-commerce companies, facilitating transactions between buyers and sellers through the IONE intermediary platform.
 
+## 🌐 Live Demo
+
+**View the application UI on GitHub Pages:** [https://ione2025.github.io/INVOICESYSTEM/](https://ione2025.github.io/INVOICESYSTEM/)
+
+> **Note:** The GitHub Pages deployment shows the static frontend only. For full functionality with API integration, please run the server locally (see Installation section below).
+
 ## 🚀 Features
 
 - **User Management**: Register and manage buyers and sellers
