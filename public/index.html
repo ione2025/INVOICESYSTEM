@@ -460,7 +460,17 @@
     </div>
 
     <script>
-        const API_URL = '/api';
+        // Check if running on GitHub Pages (static mode) or with backend server
+        const isGitHubPages = window.location.hostname.includes('github.io');
+        const API_URL = isGitHubPages ? null : '/api';
+        
+        // Show notice if on GitHub Pages
+        if (isGitHubPages) {
+            const notice = document.createElement('div');
+            notice.style.cssText = 'background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; border: 1px solid #ffeaa7;';
+            notice.innerHTML = '<strong>📌 Demo Mode:</strong> This is a static preview on GitHub Pages. For full functionality with API integration, please run the server locally. See <a href="https://github.com/ione2025/INVOICESYSTEM" style="color: #667eea; font-weight: bold;">GitHub Repository</a> for instructions.';
+            document.querySelector('.container').insertBefore(notice, document.querySelector('.header'));
+        }
 
         // Tab switching
         function showTab(tabName) {
@@ -483,6 +493,36 @@
 
         // Load statistics
         async function loadStatistics() {
+            if (!API_URL) {
+                // Show demo data for GitHub Pages
+                document.getElementById('statsGrid').innerHTML = `
+                    <div class="stat-card">
+                        <h3>-</h3>
+                        <p>Total Users</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>-</h3>
+                        <p>Total Invoices</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>-</h3>
+                        <p>Total Transactions</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>$0.00</h3>
+                        <p>Total Revenue</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>$0.00</h3>
+                        <p>IONE Commission (2.5%)</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>0</h3>
+                        <p>Paid Invoices</p>
+                    </div>
+                `;
+                return;
+            }
             try {
                 const response = await fetch(`${API_URL}/transactions/statistics`);
                 const data = await response.json();
@@ -523,6 +563,10 @@
 
         // Load users
         async function loadUsers(type) {
+            if (!API_URL) {
+                document.getElementById('usersList').innerHTML = '<p style="color: #666;">API not available in static mode. Please run the server locally to manage users.</p>';
+                return;
+            }
             try {
                 const url = type === 'all' ? `${API_URL}/users` : `${API_URL}/users?type=${type}`;
                 const response = await fetch(url);
@@ -551,6 +595,10 @@
 
         // Load invoices
         async function loadInvoices(status) {
+            if (!API_URL) {
+                document.getElementById('invoicesList').innerHTML = '<p style="color: #666;">API not available in static mode. Please run the server locally to manage invoices.</p>';
+                return;
+            }
             try {
                 const url = status === 'all' ? `${API_URL}/invoices` : `${API_URL}/invoices?status=${status}`;
                 const response = await fetch(url);
@@ -580,6 +628,10 @@
 
         // Load transactions
         async function loadTransactions(status) {
+            if (!API_URL) {
+                document.getElementById('transactionsList').innerHTML = '<p style="color: #666;">API not available in static mode. Please run the server locally to view transactions.</p>';
+                return;
+            }
             try {
                 const url = status ? `${API_URL}/transactions?status=${status}` : `${API_URL}/transactions`;
                 const response = await fetch(url);
@@ -609,6 +661,10 @@
 
         // Process payment
         async function processPayment(invoiceId) {
+            if (!API_URL) {
+                alert('API not available in static mode. Please run the server locally to process payments.');
+                return;
+            }
             if (!confirm('Process payment for this invoice?')) return;
             
             try {
@@ -637,6 +693,11 @@
 
         // Load user dropdowns for invoice creation
         async function loadUserDropdowns() {
+            if (!API_URL) {
+                document.getElementById('sellerId').innerHTML = '<option value="">API not available - Run server locally</option>';
+                document.getElementById('buyerId').innerHTML = '<option value="">API not available - Run server locally</option>';
+                return;
+            }
             try {
                 const response = await fetch(`${API_URL}/users`);
                 const data = await response.json();
@@ -689,6 +750,11 @@
         document.getElementById('userForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            if (!API_URL) {
+                document.getElementById('userMessage').innerHTML = '<div class="message message-error">API not available in static mode. Please run the server locally to create users.</div>';
+                return;
+            }
+            
             const userData = {
                 name: document.getElementById('userName').value,
                 email: document.getElementById('userEmail').value,
@@ -722,6 +788,11 @@
 
         document.getElementById('invoiceForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            if (!API_URL) {
+                document.getElementById('invoiceMessage').innerHTML = '<div class="message message-error">API not available in static mode. Please run the server locally to create invoices.</div>';
+                return;
+            }
             
             // Collect items
             const items = [];
